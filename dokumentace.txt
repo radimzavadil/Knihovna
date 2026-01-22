@@ -1,1 +1,2 @@
 první commit
+uprava z vetve administrace
