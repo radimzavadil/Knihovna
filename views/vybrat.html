@@ -1,0 +1,55 @@
+<div>
+    <input type="text" id="search-input" placeholder="Zadej název knihy..." style="padding: 10px; width: 300px;">
+    <button onclick="searchBooks()" style="padding: 10px;">Hledat</button>
+</div>
+
+<div id="results" style="margin-top: 20px;"></div>
+
+<script>
+    async function searchBooks() {
+        const query = document.getElementById('search-input').value;
+        if (!query) return;
+
+        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+
+        if (!data.items) {
+            resultsDiv.innerHTML = 'Nebyly nalezeny žádné knihy.';
+            return;
+        }
+
+        data.items.forEach(item => {
+            const info = item.volumeInfo;
+            const title = info.title;
+            const author = info.authors ? info.authors.join(', ') : 'Neznámý autor';
+            const image = info.imageLinks ? info.imageLinks.thumbnail : 'https://via.placeholder.com/128x192?text=No+Cover';
+
+            const card = document.createElement('div');
+            card.style = 'border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 200px; vertical-align: top;';
+            card.innerHTML = `
+                <img src="${image}" style="width: 100%; height: auto; margin-bottom: 10px;">
+                <h4 style="margin: 5px 0;">${title}</h4>
+                <p style="font-size: 0.9em; color: #666;">${author}</p>
+                <button onclick="saveBook('${title.replace(/'/g, "\\'")}', '${author.replace(/'/g, "\\'")}', '${image}')">Vybrat</button>
+            `;
+            resultsDiv.appendChild(card);
+        });
+    }
+
+    async function saveBook(title, author, image) {
+        const res = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, author, image })
+        });
+
+        if (res.ok) {
+            window.location.href = '/';
+        } else {
+            alert('Chyba při ukládání knihy.');
+        }
+    }
+</script>

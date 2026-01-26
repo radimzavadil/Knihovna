@@ -36,36 +36,32 @@ function handlePages(req, res) {
   }
 
   // GET /
-if (req.url === "/" && req.method === "GET") {
-  const users = store.getAll();
+  if (req.url === "/" && req.method === "GET") {
+    const books = store.getAll();
 
-  const rows = users.map(u => `
-    <tr>
-      <td>${u.id}</td>
-      <td><a href="/user/${u.id}">${u.name}</a></td>
-      <td>${u.age}</td>
-      <td>
-        <a href="/user/${u.id}">Detail</a>
-        <a href="/edit/${u.id}">Upravit</a>
-        <button data-delete-id="${u.id}">Smazat</button>
-      </td>
-    </tr>
+    const cards = books.map(b => `
+    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 200px; vertical-align: top;">
+      <img src="${b.image}" alt="${b.title}" style="width: 100%; height: auto; margin-bottom: 10px;">
+      <h3>${b.title}</h3>
+      <p>${b.author}</p>
+      <button onclick="deleteBook(${b.id})">Smazat</button>
+    </div>
   `).join("");
 
-  const indexTpl = loadView("index.html");
-  const content = render(indexTpl, {
-    rows: rows || `<tr><td colspan="4">Žádná data.</td></tr>`
-  });
+    const indexTpl = loadView("index.html");
+    const content = render(indexTpl, {
+      results: cards || `<p>Žádné knihy v databázi.</p>`
+    });
 
-  return sendHtml(
-    res,
-    renderLayout({
-      title: "Uživatelé",
-      heading: "Správa uživatelů",
-      content
-    })
-  );
-}
+    return sendHtml(
+      res,
+      renderLayout({
+        title: "Moje Knihovna",
+        heading: "Moje Knihy",
+        content
+      })
+    );
+  }
 
 
   // GET /user/:id (detail)
@@ -97,6 +93,19 @@ if (req.url === "/" && req.method === "GET") {
     const tpl = loadView("edit.html");
     const content = render(tpl, user);
     return sendHtml(res, renderLayout({ title: "Editace", heading: "Editace uživatele", content }));
+  }
+
+  // GET /vybrat
+  if (req.url === "/vybrat" && req.method === "GET") {
+    const content = loadView("vybrat.html");
+    return sendHtml(
+      res,
+      renderLayout({
+        title: "Vybrat knihu",
+        heading: "Hledej v Google Books",
+        content
+      })
+    );
   }
 
   return false;

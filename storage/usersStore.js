@@ -33,25 +33,26 @@ function getById(id) {
   return users.find((u) => u.id === id) || null;
 }
 
-function create({ name, age }) {
-  const users = loadUsers();
-  const newId = users.length ? Math.max(...users.map((u) => u.id)) + 1 : 1;
-  const user = { id: newId, name, age };
-  users.push(user);
-  saveUsers(users);
-  return user;
+function create({ title, author, image }) {
+  const books = loadUsers();
+  const newId = books.length ? Math.max(...books.map((b) => b.id)) + 1 : 1;
+  const book = { id: newId, title, author, image };
+  books.push(book);
+  saveUsers(books);
+  return book;
 }
 
 function update(id, patch) {
-  const users = loadUsers();
-  const idx = users.findIndex((u) => u.id === id);
+  const books = loadUsers();
+  const idx = books.findIndex((b) => b.id === id);
   if (idx === -1) return null;
 
-  if (patch.name !== undefined) users[idx].name = patch.name;
-  if (patch.age !== undefined) users[idx].age = patch.age;
+  if (patch.title !== undefined) books[idx].title = patch.title;
+  if (patch.author !== undefined) books[idx].author = patch.author;
+  if (patch.image !== undefined) books[idx].image = patch.image;
 
-  saveUsers(users);
-  return users[idx];
+  saveUsers(books);
+  return books[idx];
 }
 
 function remove(id) {

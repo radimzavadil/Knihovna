@@ -20,11 +20,18 @@
 </head>
 <body>
   <div class="topbar">
-    <h1 style="margin:0">{{heading}}</h1>
-    <div><a href="/">Domů</a></div>
+    <nav>
+        <a href="/">Moje Knihy</a>
+        <a href="/vybrat">Vybrat knihu</a>
+    </nav>
   </div>
 
-  {{content}}
+  <main>
+      <h1>{{heading}}</h1>
+      <div id="content">
+          {{content}}
+      </div>
+  </main>
 
   <script src="/public/app.js"></script>
 </body>

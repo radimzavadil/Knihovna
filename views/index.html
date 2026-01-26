@@ -17,16 +17,25 @@
 <div class="card">
   <h2>Seznam uživatelů</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th><th>Jméno</th><th>Věk</th><th>Akce</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{rows}}
-    </tbody>
-  </table>
+  <div id="book-list">
+    {{results}}
+  </div>
 
   <p class="muted">Tip: Smazání je přes DELETE, editace přes PUT (odesílá se přes JS fetch).</p>
 </div>
+
+<script>
+  async function deleteBook(id) {
+    if (!confirm('Opravdu smazat?')) return;
+
+    const res = await fetch(`/api/users/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      alert('Chyba při mazání.');
+    }
+  }
+</script>

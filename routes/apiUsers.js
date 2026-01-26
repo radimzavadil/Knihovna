@@ -18,11 +18,11 @@ function sendJson(res, status, data) {
 }
 
 function handleApiUsers(req, res) {
-    // GET /api/users – vrátí všechny uživatele
-    if (req.url === "/api/users" && req.method === "GET") {
+  // GET /api/users – vrátí všechny uživatele
+  if (req.url === "/api/users" && req.method === "GET") {
     const users = store.getAll();
     return sendJson(res, 200, users);
-    }
+  }
 
 
   // POST /api/users
@@ -30,14 +30,15 @@ function handleApiUsers(req, res) {
     return readBodyJson(req, (err, data) => {
       if (err) return sendJson(res, 400, { error: "Neplatný JSON" });
 
-      const name = String(data.name || "").trim();
-      const age = Number(data.age);
+      const title = String(data.title || "").trim();
+      const author = String(data.author || "").trim();
+      const image = String(data.image || "").trim();
 
-      if (!name || Number.isNaN(age)) {
-        return sendJson(res, 400, { error: "Chybí name nebo age" });
+      if (!title) {
+        return sendJson(res, 400, { error: "Chybí název knihy" });
       }
 
-      const created = store.create({ name, age });
+      const created = store.create({ title, author, image });
       return sendJson(res, 201, created);
     });
   }
