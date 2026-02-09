@@ -1,0 +1,23 @@
+<div class="card">
+    <form id="editForm" data-id="{{id}}">
+        <div class="row">
+            <label>Název knihy:</label><br />
+            <input name="title" value="{{title}}" required />
+        </div>
+        <div class="row">
+            <label>Autor:</label><br />
+            <input name="author" value="{{author}}" required />
+        </div>
+        <div class="row">
+            <label>Stav (např. NOVÁ nebo %):</label><br />
+            <input name="status" value="{{status}}" required />
+        </div>
+        <div class="row">
+            <label>URL obrázku:</label><br />
+            <input name="image" value="{{image}}" />
+        </div>
+        <button type="submit">Uložit změny</button>
+        <a href="/book/{{id}}"><button type="button" style="background: #f0f0f0; color: #333;">Zrušit</button></a>
+        <p id="editMsg" class="muted"></p>
+    </form>
+</div>

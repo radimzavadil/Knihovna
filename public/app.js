@@ -9,55 +9,39 @@ async function api(path, options) {
   return data;
 }
 
-// CREATE (POST /api/users)
-const createForm = document.getElementById("createForm");
-if (createForm) {
-  createForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const fd = new FormData(createForm);
-    const payload = { name: fd.get("name"), age: Number(fd.get("age")) };
-
-    const msg = document.getElementById("createMsg");
-    try {
-      await api("/api/users", { method: "POST", body: JSON.stringify(payload) });
-      window.location.reload();
-    } catch (err) {
-      msg.textContent = "Chyba: " + JSON.stringify(err.data);
-    }
-  });
-}
-
-// EDIT (PUT /api/users/:id)
-const editForm = document.getElementById("editForm");
-if (editForm) {
-  editForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const id = editForm.dataset.id;
-    const fd = new FormData(editForm);
-    const payload = { name: fd.get("name"), age: Number(fd.get("age")) };
-
-    const msg = document.getElementById("editMsg");
-    try {
-      await api(`/api/users/${id}`, { method: "PUT", body: JSON.stringify(payload) });
-      window.location.href = `/user/${id}`;
-    } catch (err) {
-      msg.textContent = "Chyba: " + JSON.stringify(err.data);
-    }
-  });
-}
-
-// DELETE tlačítka (DELETE /api/users/:id)
-document.addEventListener("click", async (e) => {
-  const btn = e.target.closest("[data-delete-id]");
-  if (!btn) return;
-
-  const id = btn.dataset.deleteId;
-  if (!confirm("Opravdu smazat uživatele #" + id + "?")) return;
+// Funkce pro smazání knihy
+async function deleteBook(id) {
+  if (!confirm("Opravdu smazat knihu?")) return;
 
   try {
-    await api(`/api/users/${id}`, { method: "DELETE" });
+    await api(`/api/books/${id}`, { method: "DELETE" });
     window.location.href = "/";
   } catch (err) {
-    alert("Chyba: " + JSON.stringify(err.data));
+    alert("Chyba při mazání: " + (err.data?.error || JSON.stringify(err.data)));
+  }
+}
+
+// EDITACE KNIHY (PUT /api/books/:id)
+document.addEventListener("submit", async (e) => {
+  const editForm = e.target.closest("#editForm");
+  if (!editForm) return;
+
+  e.preventDefault();
+  const id = editForm.dataset.id;
+  const fd = new FormData(editForm);
+  const payload = {
+    title: fd.get("title"),
+    author: fd.get("author"),
+    status: fd.get("status"),
+    image: fd.get("image")
+  };
+
+  const msg = document.getElementById("editMsg");
+  try {
+    await api(`/api/books/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+    window.location.href = `/book/${id}`;
+  } catch (err) {
+    if (msg) msg.textContent = "Chyba: " + (err.data?.error || JSON.stringify(err.data));
+    else alert("Chyba při ukládání.");
   }
 });

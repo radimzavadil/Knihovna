@@ -1,0 +1,12 @@
+<div class="card">
+    <img src="{{image}}" alt="{{title}}" style="max-width: 200px; height: auto; margin-bottom: 1rem;">
+    <h2>{{title}}</h2>
+    <p><b>Autor:</b> {{author}}</p>
+    <p><b>Stav:</b> {{status}}</p>
+
+    <div class="actions">
+        <a href="/edit/{{id}}"><button>Upravit</button></a>
+        <button onclick="deleteBook({{id}})">Smazat</button>
+        <a href="/"><button style="background: #f0f0f0; color: #333;">Zpět na seznam</button></a>
+    </div>
+</div>

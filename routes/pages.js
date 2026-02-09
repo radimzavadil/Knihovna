@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const store = require("../storage/usersStore");
+const store = require("../storage/booksStore");
 
 const VIEWS_DIR = path.join(__dirname, "..", "views");
 
@@ -41,9 +41,12 @@ function handlePages(req, res) {
 
     const cards = books.map(b => `
     <div style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 200px; vertical-align: top;">
-      <img src="${b.image}" alt="${b.title}" style="width: 100%; height: auto; margin-bottom: 10px;">
-      <h3>${b.title}</h3>
-      <p>${b.author}</p>
+      <a href="/book/${b.id}">
+        <img src="${b.image}" alt="${b.title}" style="width: 100%; height: auto; margin-bottom: 10px;">
+        <h3>${b.title}</h3>
+      </a>
+      <p><b>Autor:</b> ${b.author}</p>
+      <p><b>Stav:</b> ${b.status}</p>
       <button onclick="deleteBook(${b.id})">Smazat</button>
     </div>
   `).join("");
@@ -63,36 +66,35 @@ function handlePages(req, res) {
     );
   }
 
-
-  // GET /user/:id (detail)
-  if (req.url.startsWith("/user/") && req.method === "GET") {
+  // GET /book/:id (detail)
+  if (req.url.startsWith("/book/") && req.method === "GET") {
     const id = Number(req.url.split("/")[2]);
-    const user = store.getById(id);
-    if (!user) {
+    const book = store.getById(id);
+    if (!book) {
       const errTpl = loadView("error.html");
-      const content = render(errTpl, { message: "Uživatel nenalezen." });
+      const content = render(errTpl, { message: "Kniha nenalezena." });
       return sendHtml(res, renderLayout({ title: "Chyba", heading: "Chyba", content }), 404);
     }
 
-    const tpl = loadView("detail.html");
-    const content = render(tpl, user);
-    return sendHtml(res, renderLayout({ title: "Detail", heading: "Detail uživatele", content }));
+    const tpl = loadView("bookDetail.html");
+    const content = render(tpl, book);
+    return sendHtml(res, renderLayout({ title: "Detail knihy", heading: "Detail knihy", content }));
   }
 
   // GET /edit/:id (edit formulář)
   if (req.url.startsWith("/edit/") && req.method === "GET") {
     const id = Number(req.url.split("/")[2]);
-    const user = store.getById(id);
+    const book = store.getById(id);
 
-    if (!user) {
+    if (!book) {
       const errTpl = loadView("error.html");
-      const content = render(errTpl, { message: "Uživatel nenalezen." });
+      const content = render(errTpl, { message: "Kniha nenalezena." });
       return sendHtml(res, renderLayout({ title: "Chyba", heading: "Chyba", content }), 404);
     }
 
-    const tpl = loadView("edit.html");
-    const content = render(tpl, user);
-    return sendHtml(res, renderLayout({ title: "Editace", heading: "Editace uživatele", content }));
+    const tpl = loadView("bookEdit.html");
+    const content = render(tpl, book);
+    return sendHtml(res, renderLayout({ title: "Editace knihy", heading: "Editace knihy", content }));
   }
 
   // GET /vybrat

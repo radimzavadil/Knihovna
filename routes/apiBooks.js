@@ -1,4 +1,4 @@
-const store = require("../storage/usersStore");
+const store = require("../storage/booksStore");
 
 function readBodyJson(req, cb) {
   let body = "";
@@ -17,16 +17,15 @@ function sendJson(res, status, data) {
   res.end(JSON.stringify(data));
 }
 
-function handleApiUsers(req, res) {
-  // GET /api/users – vrátí všechny uživatele
-  if (req.url === "/api/users" && req.method === "GET") {
-    const users = store.getAll();
-    return sendJson(res, 200, users);
+function handleApiBooks(req, res) {
+  // GET /api/books – vrátí všechny knihy
+  if (req.url === "/api/books" && req.method === "GET") {
+    const books = store.getAll();
+    return sendJson(res, 200, books);
   }
 
-
-  // POST /api/users
-  if (req.url === "/api/users" && req.method === "POST") {
+  // POST /api/books
+  if (req.url === "/api/books" && req.method === "POST") {
     return readBodyJson(req, (err, data) => {
       if (err) return sendJson(res, 400, { error: "Neplatný JSON" });
 
@@ -43,8 +42,8 @@ function handleApiUsers(req, res) {
     });
   }
 
-  // PUT /api/users/:id
-  if (req.url.startsWith("/api/users/") && req.method === "PUT") {
+  // PUT /api/books/:id
+  if (req.url.startsWith("/api/books/") && req.method === "PUT") {
     const id = Number(req.url.split("/")[3]);
     if (Number.isNaN(id)) return sendJson(res, 400, { error: "Neplatné ID" });
 
@@ -52,28 +51,29 @@ function handleApiUsers(req, res) {
       if (err) return sendJson(res, 400, { error: "Neplatný JSON" });
 
       const patch = {};
-      if (data.name !== undefined) patch.name = String(data.name).trim();
-      if (data.age !== undefined) patch.age = Number(data.age);
+      if (data.title !== undefined) patch.title = String(data.title).trim();
+      if (data.author !== undefined) patch.author = String(data.author).trim();
+      if (data.status !== undefined) patch.status = String(data.status).trim();
 
       const updated = store.update(id, patch);
-      if (!updated) return sendJson(res, 404, { error: "Uživatel nenalezen" });
+      if (!updated) return sendJson(res, 404, { error: "Kniha nenalezena" });
 
       return sendJson(res, 200, updated);
     });
   }
 
-  // DELETE /api/users/:id
-  if (req.url.startsWith("/api/users/") && req.method === "DELETE") {
+  // DELETE /api/books/:id
+  if (req.url.startsWith("/api/books/") && req.method === "DELETE") {
     const id = Number(req.url.split("/")[3]);
     if (Number.isNaN(id)) return sendJson(res, 400, { error: "Neplatné ID" });
 
     const removed = store.remove(id);
-    if (!removed) return sendJson(res, 404, { error: "Uživatel nenalezen" });
+    if (!removed) return sendJson(res, 404, { error: "Kniha nenalezena" });
 
-    return sendJson(res, 200, { message: "Uživatel smazán", user: removed });
+    return sendJson(res, 200, { message: "Kniha smazána", book: removed });
   }
 
   return false; // neobslouženo
 }
 
-module.exports = { handleApiUsers };
+module.exports = { handleApiBooks };

@@ -1,41 +1,8 @@
 <div class="card">
-  <h2>Přidat uživatele</h2>
-  <form id="createForm">
-    <div class="row">
-      <label>Jméno:</label><br />
-      <input name="name" required />
-    </div>
-    <div class="row">
-      <label>Věk:</label><br />
-      <input type="number" name="age" min="0" required />
-    </div>
-    <button type="submit">Přidat</button>
-    <p class="muted" id="createMsg"></p>
-  </form>
-</div>
-
-<div class="card">
-  <h2>Seznam uživatelů</h2>
+  <h2>Seznam mých knih</h2>
+  <p class="muted">Zde vidíte všechny své uložené knihy a jejich stav.</p>
 
   <div id="book-list">
     {{results}}
   </div>
-
-  <p class="muted">Tip: Smazání je přes DELETE, editace přes PUT (odesílá se přes JS fetch).</p>
 </div>
-
-<script>
-  async function deleteBook(id) {
-    if (!confirm('Opravdu smazat?')) return;
-
-    const res = await fetch(`/api/users/${id}`, {
-      method: 'DELETE'
-    });
-
-    if (res.ok) {
-      window.location.reload();
-    } else {
-      alert('Chyba při mazání.');
-    }
-  }
-</script>
