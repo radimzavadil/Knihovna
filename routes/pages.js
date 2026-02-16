@@ -40,14 +40,21 @@ function handlePages(req, res) {
     const books = store.getAll();
 
     const cards = books.map(b => `
-    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 200px; vertical-align: top;">
-      <a href="/book/${b.id}">
-        <img src="${b.image}" alt="${b.title}" style="width: 100%; height: auto; margin-bottom: 10px;">
-        <h3>${b.title}</h3>
+    <div class="book-card">
+      <a href="/book/${b.id}" class="book-cover-link">
+        <img src="${b.image}" alt="${b.title}" class="book-cover">
       </a>
-      <p><b>Autor:</b> ${b.author}</p>
-      <p><b>Stav:</b> ${b.status}</p>
-      <button onclick="deleteBook(${b.id})">Smazat</button>
+      <div class="book-footer">
+        <span class="status-tag">${b.status}</span>
+        <button class="three-dots-btn" onclick="deleteBook(${b.id})" title="Smazat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" 
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="19" cy="12" r="1"></circle>
+            <circle cx="5" cy="12" r="1"></circle>
+          </svg>
+        </button>
+      </div>
     </div>
   `).join("");
 
@@ -59,8 +66,8 @@ function handlePages(req, res) {
     return sendHtml(
       res,
       renderLayout({
-        title: "Moje Knihovna",
-        heading: "Moje Knihy",
+        title: "Library",
+        heading: "Library",
         content
       })
     );
