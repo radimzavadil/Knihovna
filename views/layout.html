@@ -1,38 +1,139 @@
 <!doctype html>
 <html lang="cs">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{title}}</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ccc; padding: .5rem; text-align: left; }
-    form .row { margin-bottom: .6rem; }
-    input { padding: .35rem; width: 100%; max-width: 420px; }
-    button { padding: .5rem .9rem; cursor: pointer; }
-    a { text-decoration: none; }
-    .muted { color: #666; font-size: .95rem; }
-    .actions a, .actions button { margin-right: .5rem; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; }
-    .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+    body {
+      background-color: #FEFEFE;
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      color: #333;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .navbar {
+      background-color: #fefefe;
+      padding: 0.3rem 1.2rem;
+      border-radius: 100px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar-item {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
+      border-radius: 100px;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-item:hover {
+      background-color: #f2f2f2;
+    }
+
+    .navbar-item:active {
+      transform: scale(0.97);
+    }
+
+    .navbar-item.icon {
+      padding: 0.6rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: .5rem;
+      text-align: left;
+    }
+
+    form .row {
+      margin-bottom: .6rem;
+    }
+
+    input {
+      padding: .35rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    button {
+      padding: .5rem .9rem;
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .muted {
+      color: #666;
+      font-size: .95rem;
+    }
+
+    .actions a,
+    .actions button {
+      margin-right: .5rem;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      background: white;
+    }
+
+    main h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
   </style>
 </head>
+
 <body>
-  <div class="topbar">
-    <nav>
-        <a href="/">Moje Knihy</a>
-        <a href="/vybrat">Vybrat knihu</a>
+  <header class="navbar-container">
+    <nav class="navbar">
+      <a href="/" class="navbar-item">Moje Knihy</a>
+      <span class="navbar-item">Filter</span>
+      <a href="/vybrat" class="navbar-item icon" title="Vybrat knihu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </a>
     </nav>
-  </div>
+  </header>
 
   <main>
-      <h1>{{heading}}</h1>
-      <div id="content">
-          {{content}}
-      </div>
+    <h1>{{heading}}</h1>
+    <div id="content">
+      {{content}}
+    </div>
   </main>
 
   <script src="/public/app.js"></script>
 </body>
+
 </html>
