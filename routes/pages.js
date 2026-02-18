@@ -111,7 +111,7 @@ function handlePages(req, res) {
       res,
       renderLayout({
         title: "Vybrat knihu",
-        heading: "Hledej v Google Books",
+        heading: "Hledej v Open Library",
         content
       })
     );

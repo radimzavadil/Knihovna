@@ -1,31 +1,33 @@
 <div>
-    <input type="text" id="search-input" placeholder="Zadej název knihy..." style="padding: 10px; width: 300px;">
-    <button onclick="searchBooks()" style="padding: 10px;">Hledat</button>
+    <input type="text" id="search-input" placeholder="Zadej název knihy...">
+    <button onclick="searchBooks()">Hledat</button>
 </div>
 
-<div id="results" style="margin-top: 20px;"></div>
+<div id="results"></div>
 
 <script>
     async function searchBooks() {
         const query = document.getElementById('search-input').value;
         if (!query) return;
 
-        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`);
         const data = await res.json();
 
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '';
 
-        if (!data.items) {
+        if (!data.docs || data.docs.length === 0) {
             resultsDiv.innerHTML = 'Nebyly nalezeny žádné knihy.';
             return;
         }
 
-        data.items.forEach(item => {
-            const info = item.volumeInfo;
-            const title = info.title;
-            const author = info.authors ? info.authors.join(', ') : 'Neznámý autor';
-            const image = info.imageLinks ? info.imageLinks.thumbnail : 'https://via.placeholder.com/128x192?text=No+Cover';
+        data.docs.forEach(doc => {
+            const title = doc.title || 'Neznámý název';
+            const author = doc.author_name ? doc.author_name.join(', ') : 'Neznámý autor';
+            const coverId = doc.cover_i;
+            const image = coverId
+                ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
+                : 'https://via.placeholder.com/128x192?text=No+Cover';
 
             const card = document.createElement('div');
             card.style = 'border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 200px; vertical-align: top;';

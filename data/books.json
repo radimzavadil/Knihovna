@@ -1,9 +1,9 @@
 [
   {
     "id": 1,
-    "title": "Harry Potter a Kámen mudrců",
-    "author": "J.K. Rowling",
-    "image": "http://books.google.com/books/content?id=qK3bDAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    "title": "Harry Potter and the Half-Blood Prince",
+    "author": "J. K. Rowling",
+    "image": "https://covers.openlibrary.org/b/id/10716273-M.jpg",
     "status": "NOVÁ"
   }
 ]
